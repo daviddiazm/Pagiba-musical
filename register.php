@@ -10,6 +10,7 @@ if($_POST) {
   $ejecutar = mysqli_query($conexion, $query);
   if ($ejecutar) {
     echo "Registro exitoso.";
+    header("location:login.php");
   } else {
     echo "Error al registrar usuario: " . mysqli_error($conexion);
   }
