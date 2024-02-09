@@ -1,15 +1,19 @@
 <?php
+include('conexion.php');
+
 
 if($_POST) {
   session_start();
   $usuario = (isset($_POST['usuario'])) ? $_POST['usuario'] : "no a ingresado el usuario";
   $contrasenia = (isset($_POST['contrasenia'])) ? $_POST['contrasenia'] : "no a ingresado la contrasenia";
   $_SESSION['usuario'] = $usuario;
-  if ($usuario != "david" || $contrasenia != "lulu") {
-    echo "el usuario no existe";
-  } else {
+  $validarLogin = mysqli_query($conexion, "SELECT * FROM usuarios WHERE usuario='$usuario' and contrasenia='$contrasenia'");
+  if (mysqli_num_rows($validarLogin) > 0) {
     $_SESSION['tiempoInicio']= time();
     header("location:home.php");
+    exit;
+  } else {
+    echo '<h2 style="font-size: 24px; color: #ff6666;">El usuario no existe</h2>';
   }
 }
 
@@ -35,6 +39,10 @@ if($_POST) {
     </br>
     <button type="submit" class="btn btn-success" style="background-color: #66ccff; color: #fff; font-size: 16px; padding: 10px 20px; margin-top:16px; border: none; cursor: pointer;">Ingresar</button>
   </form>
+
+  <p>Si aun no tienes una cuenta puedes registrarte:</p>
+  <a href="register.php" style="text-decoration: none; background-color: #66ccff; color: #fff; padding: 10px 20px; border-radius: 5px; font-size: 16px;">Register</a>
+
 
 </body>
 </html>
