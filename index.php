@@ -11,6 +11,7 @@
   <h3 style="font-size: 18px; color: #333;">¡Bienvenido!</h3>
   
   <a href="login.php" style="text-decoration: none; background-color: #66ccff; color: #fff; padding: 10px 20px; border-radius: 5px; font-size: 16px;">Iniciar Sesión</a>
+  <a href="register.php" style="text-decoration: none; background-color: #66ccff; color: #fff; padding: 10px 20px; border-radius: 5px; font-size: 16px;">Register</a>
 
 </body>
 </html>
