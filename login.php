@@ -1,25 +1,35 @@
-<?php
-include('conexion.php');
-
-
+<?php include('conexion.php');
+error_reporting(E_ALL);
 if($_POST) {
   session_start();
-  $usuario = (isset($_POST['usuario'])) ? $_POST['usuario'] : "no a ingresado el usuario";
-  $contrasenia = (isset($_POST['contrasenia'])) ? $_POST['contrasenia'] : "no a ingresado la contrasenia";
-  $_SESSION['usuario'] = $usuario;
-  $validarLogin = mysqli_query($conexion, "SELECT * FROM usuarios WHERE usuario='$usuario' and contrasenia='$contrasenia'");
-  if (mysqli_num_rows($validarLogin) > 0) {
-    $_SESSION['tiempoInicio']= time();
-    header("location:home.php");
-    exit;
+  $usuario = (isset($_POST['usuario'])) ? $_POST['usuario'] : "no ha ingresado el usuario";
+  $contrasenia = (isset($_POST['contrasenia'])) ? $_POST['contrasenia'] : "no ha ingresado la contraseña";
+
+  $usuario = mysqli_real_escape_string($conexion, $usuario);
+
+  $stmt = $conexion->prepare("SELECT contrasenia FROM usuarios WHERE usuario=?");
+  $stmt->bind_param("s", $usuario);
+  $stmt->execute();
+  $resultado = $stmt->get_result();
+
+  if ($resultado->num_rows === 1) {
+    $fila = $resultado->fetch_assoc();
+    $contrasenia_hash = $fila['contrasenia'];
+
+    // if (password_verify($contrasenia, $contrasenia_hash)) {
+    if ($contrasenia == $contrasenia_hash) {
+      $_SESSION['usuario'] = $usuario;
+      $_SESSION['tiempoInicio'] = time();
+      header("location: home.php");
+      exit;
+    } else {
+      echo '<h2 style="font-size: 24px; color: #ff6666;">Contraseña incorrecta</h2>';
+    }
   } else {
     echo '<h2 style="font-size: 24px; color: #ff6666;">El usuario no existe</h2>';
   }
 }
-
-?>
-
-<!DOCTYPE html>
+?><!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
